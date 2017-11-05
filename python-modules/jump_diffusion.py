@@ -1,4 +1,4 @@
-def jump_diffusion(S0=1, K=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
+def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
                    a=0.2, b=0.2, Nsteps=252, Nsim=100, alpha=0.05):
     '''
     Monte Carlo simulation [1] of Merton's Jump Diffusion Model [2].
@@ -79,8 +79,8 @@ def jump_diffusion(S0=1, K=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     Calculate drift (M) and volatility (V) of the stock price process under
     Merton's jump diffusion process.
     '''
-    M = S0 * np.exp(mu*T + Lambda*T*(lognormal_mean-1))
-    V = S0**2 * (np.exp((2*mu + sigma**2)*T \
+    M = S * np.exp(mu*T + Lambda*T*(lognormal_mean-1))
+    V = S**2 * (np.exp((2*mu + sigma**2)*T \
         + Lambda*T*(lognormal_variance + lognormal_mean**2 - 1)) \
         - np.exp(2*mu*T + 2*Lambda*T*(lognormal_mean - 1)))
 
@@ -93,7 +93,7 @@ def jump_diffusion(S0=1, K=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     simulated_paths = np.zeros([Nsim, Nsteps+1])
 
     # Replace the first column of the array with the vector of initial price S
-    simulated_paths[:,0] = S0
+    simulated_paths[:,0] = S
 
     '''
     To account for the multiple sources of uncertainty in the jump diffusion
@@ -136,7 +136,7 @@ def jump_diffusion(S0=1, K=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     ax.set(title="Monte Carlo simulated stock price paths in Merton's jump \
 diffusion model\n$S_0$ = {}, $\mu$ = {}, $\sigma$ = {}, $\mu_Y$ = {}, \
 $\sigma_Y$ = {}, $\lambda$ = {}, $T$ = {}, Nsteps = {}, Nsim = {}"\
-           .format(S0, mu, sigma, a, b, Lambda, T, Nsteps, Nsim), \
+           .format(S, mu, sigma, a, b, Lambda, T, Nsteps, Nsim), \
            xlabel='Time (days)', ylabel='Stock price')
 
     # Display figure in a Python environment
