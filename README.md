@@ -13,3 +13,8 @@ The model builds on the _standard Brownian motion_, which can also be generated 
 [1] Glasserman, P. (2003) _Monte Carlo Methods in Financial Engineering_, Springer Applications of Mathematics, Vol. 53
 
 [2] Merton, R.C. (1976) _Option pricing when underlying stock returns are discontinuous_, Journal of Financial Economics, 3:125-144
+
+## Contributing
+This is a small but continuously evolving project open to anyone willing to contribute—simply fork the repository and modify its content. Any improvement, in terms of code speed and readability, or inclusion of new models (such as those from Glasserman's book), is more than welcome. For git commits, it is desirable to follow [Udacity's Git Commit Message Style Guide](https://udacity.github.io/git-styleguide/).
+
+Feel free to bookmark, or "star", the repository if you find this project interesting. Thank you for your support!
