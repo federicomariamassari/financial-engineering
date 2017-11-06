@@ -47,6 +47,7 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     # Import required libraries
     import time
     import numpy as np
+    from scipy import stats
     import matplotlib.pyplot as plt
     import seaborn as sns
 
@@ -117,6 +118,36 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
                                * normal_rv[:,i] + a*poisson[:,i] \
                                + np.sqrt(b**2) * np.sqrt(poisson[:,i]) \
                                * normal_rv2[:,i])
+
+    # Single out array of simulated prices at maturity T
+    final_prices = simulated_paths[:,-1]
+
+    # Compute mean, variance, standard deviation, skewness, excess kurtosis
+    mean_jump = np.mean(final_prices)
+    var_jump = np.var(final_prices)
+    std_jump = np.std(final_prices)
+    skew_jump = stats.skew(final_prices)
+    kurt_jump = stats.kurt(final_prices)
+
+    # Calculate confidence interval for the mean
+    ci_low = mean_jump - std_jump/np.sqrt(Nsim)*stats.norm.ppf(1-0.5*alpha)
+    ci_high = mean_jump + std_jump/np.sqrt(Nsim)*stats.norm.ppf(1-0.5*alpha)
+
+    # Print statistics, align results
+    print("Merton's Jump Diffusion Model")
+    print('-----------------------------')
+    print('Statistics')
+    print('-----------------------------')
+    print('Mean {:>24.4f}'.format(mean_jump, ci_low))
+    print('Variance {:>20.4f}'.format(var_jump))
+    print('Standard deviation {:>10.4f}'.format(std_jump))
+    print('Skewness {:>20.4f}'.format(skew_jump))
+    print('Excess kurtosis {:>13.4f}'.format(kurt_jump))
+    print('\nConfidence interval, Mean')
+    print('-----------------------------')
+    print('Alpha {:>23.2f}'.format(alpha))
+    print('Lower bound {:>17.4f}'.format(ci_low))
+    print('Upper bound {:>17.4f}'.format(ci_high))
 
     # Choose palette, figure size, and define figure axes
     sns.set(palette='viridis')
