@@ -138,7 +138,7 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     print('-----------------------------')
     print('Statistics')
     print('-----------------------------')
-    print('Mean {:>24.4f}'.format(mean_jump, ci_low))
+    print('Mean {:>24.4f}'.format(mean_jump))
     print('Variance {:>20.4f}'.format(var_jump))
     print('Standard deviation {:>10.4f}'.format(std_jump))
     print('Skewness {:>20.4f}'.format(skew_jump))
