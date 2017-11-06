@@ -127,7 +127,7 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     var_jump = np.var(final_prices)
     std_jump = np.std(final_prices)
     skew_jump = stats.skew(final_prices)
-    kurt_jump = stats.kurt(final_prices)
+    kurt_jump = stats.kurtosis(final_prices)
 
     # Calculate confidence interval for the mean
     ci_low = mean_jump - std_jump/np.sqrt(Nsim)*stats.norm.ppf(1-0.5*alpha)
