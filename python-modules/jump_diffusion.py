@@ -1,5 +1,5 @@
 def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
-                   a=0.2, b=0.2, Nsteps=252, Nsim=100, alpha=0.05):
+                   a=0.2, b=0.2, Nsteps=252, Nsim=100, alpha=0.05, seed=None):
     '''
     Monte Carlo simulation [1] of Merton's Jump Diffusion Model [2].
     The model is specified through the stochastic differential equation (SDE):
@@ -33,6 +33,9 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     Nsim: int. The number of Monte Carlo simulations (at least 10,000 required
           to generate stable results).
     alpha: float. The confidence interval significance level, in [0, 1].
+    seed: int. Set random seed, for reproducibility of the results. Default
+          value is None (the best seed available is used, but outcome will vary
+          in each experiment).
 
     References
     ---------------------------------------------------------------------------
@@ -50,6 +53,9 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     from scipy import stats
     import matplotlib.pyplot as plt
     import seaborn as sns
+
+    # Set random seed
+    np.random.seed(seed)
 
     '''
     Time the whole path-generating process, using a tic-toc method familiar
