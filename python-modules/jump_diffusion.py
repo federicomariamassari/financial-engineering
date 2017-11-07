@@ -28,7 +28,8 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     Lambda: float. The intensity of the Poisson process in the jump diffusion
             model ('lambda' is a protected keyword in Python).
     a, b: float. Parameters required to calculate, respectively, the mean and
-          variance of a standard lognormal distribution (see code).
+          variance of a standard lognormal distribution, log(x) ~ N(a, b**2).
+          (see code).
     Nsteps: int. The number of monitoring dates, i.e. the time steps.
     Nsim: int. The number of Monte Carlo simulations (at least 10,000 required
           to generate stable results).
@@ -68,23 +69,24 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
 
     '''
     Compute mean and variance of a standard lognormal distribution from user
-    defined parameters a and b.
-    Glasserman defines a, b s.t. each multiplicative jump Y(j) ~ LN(a, b**2),
-    i.e. a = mean_Y, b**2 = variance_Y.
-    However, a and b are not independent of each other, as both impact on the
-    definition of the mean and variance of the standard lognormal process.
-    Here, a and b are chosen s.t. log(Y(j)) ~ N(a, b**2), which means Y(j) ~
-    LN(mean_Y, variance_Y), with:
+    defined parameters a and b. The latter are useful to simulate the jump
+    component in Monte Carlo.
+    a and b are chosen such that log(Y(j)) ~ N(a, b**2). This implies that the
+    mean and variance of the multiplicative jumps will be:
 
-     mean_Y = np.exp(a + 0.5*(b**2))
-     variance_Y = np.exp(2*a + b**2) * (np.exp(b**2)-1)
+     * lognormal_mean = np.exp(a + 0.5*(b**2))
+     * lognormal_variance = np.exp(2*a + b**2) * (np.exp(b**2)-1)
+
     '''
     lognormal_mean = np.exp(a + 0.5*(b**2))
     lognormal_variance = np.exp(2*a + b**2) * (np.exp(b**2)-1)
 
     '''
-    Calculate drift (M) and volatility (V) of the stock price process under
-    Merton's jump diffusion process.
+    Calculate the theoretical drift (M) and volatility (V) of the stock price
+    process under Merton's jump diffusion model. These values can be used to
+    monitor the rate of convergence of Monte Carlo estimates as the number of
+    simulated experiments increases, and can help spot errors, if any, in
+    implementing the model.
     '''
     M = S * np.exp(mu*T + Lambda*T*(lognormal_mean-1))
     V = S**2 * (np.exp((2*mu + sigma**2)*T \
