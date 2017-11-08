@@ -144,7 +144,11 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     # Print statistics, align results
     print("Merton's Jump Diffusion Model")
     print('-----------------------------')
-    print('Statistics')
+    print('Theoretical Moments')
+    print('-----------------------------')
+    print('Mean (M){:>21.4f}'.format(M))
+    print('Variance (V){:>17.4f}\n'.format(V))
+    print('Monte Carlo Estimates')
     print('-----------------------------')
     print('Mean {:>24.4f}'.format(mean_jump))
     print('Variance {:>20.4f}'.format(var_jump))
