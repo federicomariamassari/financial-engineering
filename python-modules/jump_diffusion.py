@@ -117,7 +117,7 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     '''
     Z_1 = np.random.normal(size=[Nsim, Nsteps])
     Z_2 = np.random.normal(size=[Nsim, Nsteps])
-    Poisson = np.random.Poisson(Lambda*Delta_t, [Nsim, Nsteps])
+    Poisson = np.random.poisson(Lambda*Delta_t, [Nsim, Nsteps])
 
     # Populate the matrix with Nsim randomly generated paths of length Nsteps
     for i in range(Nsteps):
