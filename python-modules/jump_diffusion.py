@@ -74,12 +74,12 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     a and b are chosen such that log(Y(j)) ~ N(a, b**2). This implies that the
     mean and variance of the multiplicative jumps will be:
 
-     * lognormal_mean = np.exp(a + 0.5*(b**2))
-     * lognormal_variance = np.exp(2*a + b**2) * (np.exp(b**2)-1)
+     * mean_Y = np.exp(a + 0.5*(b**2))
+     * variance_Y = np.exp(2*a + b**2) * (np.exp(b**2)-1)
 
     '''
-    lognormal_mean = np.exp(a + 0.5*(b**2))
-    lognormal_variance = np.exp(2*a + b**2) * (np.exp(b**2)-1)
+    mean_Y = np.exp(a + 0.5*(b**2))
+    variance_Y = np.exp(2*a + b**2) * (np.exp(b**2)-1)
 
     '''
     Calculate the theoretical drift (M) and volatility (V) of the stock price
@@ -88,10 +88,10 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
     simulated experiments increases, and can help spot errors, if any, in
     implementing the model.
     '''
-    M = S * np.exp(mu*T + Lambda*T*(lognormal_mean-1))
+    M = S * np.exp(mu*T + Lambda*T*(mean_Y-1))
     V = S**2 * (np.exp((2*mu + sigma**2)*T \
-        + Lambda*T*(lognormal_variance + lognormal_mean**2 - 1)) \
-        - np.exp(2*mu*T + 2*Lambda*T*(lognormal_mean - 1)))
+        + Lambda*T*(variance_Y + mean_Y**2 - 1)) \
+        - np.exp(2*mu*T + 2*Lambda*T*(mean_Y - 1)))
 
     '''
     Generate an Nsim x (Nsteps+1) array of zeros to preallocate the simulated
@@ -115,17 +115,17 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
        price to jump randomly (random timing); the latter (a Gaussian variable)
        defines both the direction (sign) and intensity (magnitude) of the jump.
     '''
-    normal_rv = np.random.normal(size=[Nsim, Nsteps])
-    normal_rv2 = np.random.normal(size=[Nsim, Nsteps])
-    poisson = np.random.poisson(Lambda*dt, [Nsim, Nsteps])
+    Z_1 = np.random.normal(size=[Nsim, Nsteps])
+    Z_2 = np.random.normal(size=[Nsim, Nsteps])
+    Poisson = np.random.Poisson(Lambda*dt, [Nsim, Nsteps])
 
     # Populate the matrix with Nsim randomly generated paths of length Nsteps
     for i in range(Nsteps):
         simulated_paths[:,i+1] = simulated_paths[:,i]*np.exp((mu
                                - sigma**2/2)*dt + sigma*np.sqrt(dt) \
-                               * normal_rv[:,i] + a*poisson[:,i] \
-                               + np.sqrt(b**2) * np.sqrt(poisson[:,i]) \
-                               * normal_rv2[:,i])
+                               * Z_1[:,i] + a*Poisson[:,i] \
+                               + np.sqrt(b**2) * np.sqrt(Poisson[:,i]) \
+                               * Z_2[:,i])
 
     # Single out array of simulated prices at maturity T
     final_prices = simulated_paths[:,-1]
@@ -173,8 +173,8 @@ def jump_diffusion(S=1, X=0.5, T=1, mu=0.12, sigma=0.3, Lambda=0.25,
 
     # Set title (LaTeX notation) and x- and y- labels
     ax.set(title="Monte Carlo simulated stock price paths in Merton's jump \
-diffusion model\n$S_0$ = {}, $\mu$ = {}, $\sigma$ = {}, $\mu_Y$ = {}, \
-$\sigma_Y$ = {}, $\lambda$ = {}, $T$ = {}, Nsteps = {}, Nsim = {}"\
+diffusion model\n$S_0$ = {}, $\mu$ = {}, $\sigma$ = {}, $a$ = {}, $b$ = {}, \
+$\lambda$ = {}, $T$ = {}, Nsteps = {}, Nsim = {}"\
            .format(S, mu, sigma, a, b, Lambda, T, Nsteps, Nsim), \
            xlabel='Time (days)', ylabel='Stock price')
 
