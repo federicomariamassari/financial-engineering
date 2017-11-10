@@ -1,1 +1,2 @@
+# Prevent Jupyter Notebook from showing up as main repository language
 *.ipynb linguist-vendored
