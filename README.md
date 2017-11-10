@@ -14,6 +14,20 @@ The model builds on the _standard Brownian motion_, which can also be generated 
 
 [2] Merton, R.C. (1976) _Option pricing when underlying stock returns are discontinuous_, Journal of Financial Economics, 3:125-144
 
+## Dependencies
+`financial-engineering` requires Python 3.5+, and is built on top of the following libraries:
+- **NumPy**: v. 1.13+
+- **SciPy**: v. 0.19+
+- **Matplotlib**: v. 2.0+
+- **Seaborn**: v. 0.8+
+
+## Installation
+The source code is currently hosted on GitHub at: https://github.com/federicomariamassari/financial-engineering.
+Either clone or download the git repository. To clone the repository, on either Terminal (macOS) or Command Prompt (Windows) enter the folder inside which you want the repository to be, possibly changing directory with `cd <desired path>`, and execute:
+```shell
+$ git clone https://github.com/federicomariamassari/financial-engineering.git
+```
+
 ## Contributing
 This is a small but continuously evolving project open to anyone willing to contribute—simply fork the repository and modify its content. Any improvement, in terms of code speed and readability, or inclusion of new models (such as those from Glasserman's book), is more than welcome. For git commits, it is desirable to follow [Udacity's Git Commit Message Style Guide](https://udacity.github.io/git-styleguide/).
 
